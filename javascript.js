@@ -1,4 +1,4 @@
-const gameboard = (() => {
+const gameBoard = (() => {
     let board = [["", "", ""], ["", "",""], ["", "", ""]];
 
     const checkIfMarkerAvailable = (location) => {
@@ -8,11 +8,12 @@ const gameboard = (() => {
             return false
     };
 
-    const addMarker = (marker, location) => {
+    const addMarker = (markerInput, location) => {
         if (!checkIfMarkerAvailable(location))
             return null
+        console.log(`addMarker called, location: ${location}`);
 
-        return board[location[0]][location[1]] = marker;
+        board[location[0]][location[1]] = markerInput;
     };
     
     return {
@@ -21,3 +22,38 @@ const gameboard = (() => {
         addMarker
     };
 })();
+
+const displayController = ((gameBoard) => {
+    const boardCells = document.querySelectorAll(".cell");
+
+    const startLoop = () => {
+        boardCells.forEach(cell => {
+            cell.addEventListener('click', () => addPlay(cell, "o"));
+        });
+    };
+    
+    const addPlay = (cell, marker) => {
+        let location = cell.dataset.location.split(",");
+        gameBoard.addMarker("o", location)
+        addMarkerToCell(cell, marker)
+    };
+
+    const addMarkerToCell = (cell, marker) => {
+        cell.textContent = marker;
+    };
+
+    return {
+        // Return boardCells for testing purposes only
+        boardCells,
+        startLoop
+    }
+})(gameBoard);
+
+const Player = (playerMarker) => {
+    const marker = playerMarker;
+};
+
+playerX = Player('x');
+playerO = Player('o');
+
+displayController.startLoop();
