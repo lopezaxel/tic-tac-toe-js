@@ -14,10 +14,14 @@ const gameBoard = (() => {
         board[location[0]][location[1]] = markerInput;
     };
 
+    const itemsEqualTo = (arr, value) => {
+        return arr.every(item => item === value);
+    };
+
     const checkIfWin = (location, mark) => {
-        if ((board[0][0] == mark) && (board[0][1] == mark) && (board[0][2] == mark) ||
-            (board[1][0] == mark) && (board[1][1] == mark) && (board[1][2] == mark) ||
-            (board[2][0] == mark) && (board[2][1] == mark) && (board[2][2] == mark) ||
+        if (itemsEqualTo(board[0], mark) ||
+            (itemsEqualTo(board[1], mark)) ||
+            (itemsEqualTo(board[2], mark)) ||
             (board[0][0] == mark) && (board[1][0] == mark) && (board[2][0] == mark) ||
             (board[0][1] == mark) && (board[1][1] == mark) && (board[2][1] == mark) ||
             (board[0][2] == mark) && (board[1][2] == mark) && (board[2][2] == mark) ||
@@ -29,13 +33,25 @@ const gameBoard = (() => {
             return false
         }
     };
+
+    const checkIfTie = () => {
+        // return board.every(row => (row.every(cell => cell != "")))
+        if (board.every(row => (row.every(cell => cell != "")))) {
+            console.log("tie");
+            return true
+        } else {
+            return false
+        }
+    };
     
     return {
         // For testing purposes return board
         board,
         addMarker,
         checkIfCellAvailable,
-        checkIfWin
+        checkIfWin,
+        itemsEqualTo,
+        checkIfTie
     };
 })();
 
@@ -59,7 +75,7 @@ const displayController = ((gameBoard) => {
         addMarkerToCell(cell, marker)
         changeCurrentMarker();
         
-        if (gameBoard.checkIfWin(location, marker))
+        if (gameBoard.checkIfWin(location, marker) || gameBoard.checkIfTie())
             gameOver = true
     };
 
