@@ -9,8 +9,6 @@ const gameBoard = (() => {
     };
 
     const addMarker = (markerInput, location) => {
-        console.log(`addMarker called, location: ${location}`);
-        
         board[location[0]][location[1]] = markerInput;
     };
 
@@ -27,7 +25,6 @@ const gameBoard = (() => {
             (board[0][2] == mark) && (board[1][2] == mark) && (board[2][2] == mark) ||
             (board[0][0] == mark) && (board[1][1] == mark) && (board[2][2] == mark) ||
             (board[0][2] == mark) && (board[1][1] == mark) && (board[2][0] == mark)) {
-            console.log(`win`);
             return true
         } else {
             return false
@@ -35,12 +32,9 @@ const gameBoard = (() => {
     };
 
     const checkIfTie = () => {
-        // return board.every(row => (row.every(cell => cell != "")))
         if (board.every(row => (row.every(cell => cell != "")))) {
-            console.log("tie");
             return true
         } else {
-            console.log("false returned");
             return false
         }
     };
@@ -111,7 +105,6 @@ const displayController = ((gameBoard) => {
         if (gameBoard.checkIfWin(marker) || gameBoard.checkIfTie()) {
             restartBtn.show();
             gameOver = true;
-            console.log("gameover or tie");
         }
     };
 
@@ -138,8 +131,6 @@ const displayController = ((gameBoard) => {
     };
 
     return {
-        // Return boardCells for testing purposes only
-        boardCells,
         startLoop,
         restartBoard
     }
