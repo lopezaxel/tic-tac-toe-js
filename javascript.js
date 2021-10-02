@@ -18,7 +18,7 @@ const gameBoard = (() => {
         return arr.every(item => item === value);
     };
 
-    const checkIfWin = (location, mark) => {
+    const checkIfWin = (mark) => {
         if (itemsEqualTo(board[0], mark) ||
             (itemsEqualTo(board[1], mark)) ||
             (itemsEqualTo(board[2], mark)) ||
@@ -40,8 +40,13 @@ const gameBoard = (() => {
             console.log("tie");
             return true
         } else {
+            console.log("false returned");
             return false
         }
+    };
+
+    const restartBoard = () => {
+        return board = [["", "", ""], ["", "",""], ["", "", ""]];
     };
     
     return {
@@ -51,8 +56,33 @@ const gameBoard = (() => {
         checkIfCellAvailable,
         checkIfWin,
         itemsEqualTo,
-        checkIfTie
+        checkIfTie,
+        restartBoard
     };
+})();
+
+const restartBtn = (() => {
+    const btn = document.querySelector(".restart-btn");
+    btn.addEventListener("click", () => pressed());
+
+    const pressed = () => {
+        gameBoard.board = gameBoard.restartBoard();
+        hide();
+        displayController.restartBoard();
+    };
+
+    const show = () => {
+        btn.style.display = "block";
+    };
+
+    const hide = () => {
+        btn.style.display = "none";
+    };
+
+    return {
+        show,
+        hide
+    }
 })();
 
 const displayController = ((gameBoard) => {
@@ -66,17 +96,23 @@ const displayController = ((gameBoard) => {
     };
     
     const addPlay = (cell, marker) => {
-        if (gameOver)
+        if (gameOver) {
             return false
+        }
+        
         let location = cell.dataset.location.split(",");
         if (!gameBoard.checkIfCellAvailable(location))
             return null
+        
         gameBoard.addMarker(marker, location)
         addMarkerToCell(cell, marker)
         changeCurrentMarker();
         
-        if (gameBoard.checkIfWin(location, marker) || gameBoard.checkIfTie())
-            gameOver = true
+        if (gameBoard.checkIfWin(marker) || gameBoard.checkIfTie()) {
+            restartBtn.show();
+            gameOver = true;
+            console.log("gameover or tie");
+        }
     };
 
     const addMarkerToCell = (cell, marker) => {
@@ -96,10 +132,16 @@ const displayController = ((gameBoard) => {
         });
     };
 
+    const restartBoard = () => {
+        boardCells.forEach(cell => {addMarkerToCell(cell, "")});
+        gameOver = false;
+    };
+
     return {
         // Return boardCells for testing purposes only
         boardCells,
-        startLoop
+        startLoop,
+        restartBoard
     }
 })(gameBoard);
 

@@ -5,3 +5,7 @@
     border-right: 5px solid rgb(11, 27, 119);
     border-top: 5px solid rgb(11, 27, 119);
 }
+
+.restart-btn {
+    display: none;
+}
